@@ -12,17 +12,19 @@ class Game:
     
     def __init__(self, agents: list[Agent], trade_percentage: float) -> None:
         self.agents = agents
+        if not (0 < trade_percentage <= 1):
+            raise ValueError("trade percentage wasn't between 0 and 1")
         self.trade_percent = trade_percentage
+
 
     def make_partners(self) -> Iterable[tuple[Agent, Agent]]:
         agents_copy = self.agents[:]
+        random.shuffle(agents_copy)
+        for i in range(0, len(agents_copy)-1, 2):
+            yield (agents_copy[i], agents_copy[i+1])
         
-        for i in range(len(self.agents)//2):
-            i2 = random.randrange(0, len(agents_copy))
-            agents_copy.pop(i2)
-            yield (self.agents[i], self.agents[i2])
 
-    def trade(self, agent1: Agent, agent2: Agent):
+    def trade(self, agent1: Agent, agent2: Agent) -> None:
         winner = random.randint(1, 2)
         amount = self.trade_percent * min(agent1.balance, agent2.balance)
         if winner == 1:
@@ -32,9 +34,10 @@ class Game:
             agent2.balance += amount
             agent1.balance -= amount
 
+
     def play(self, runs):
         
         for _ in range(runs):
-            
-            for partners in self.make_partners(): # odd number of agents means one agent won't get to play
-                self.trade(partners[0], partners[1])
+
+            for agent1, agent2 in self.make_partners(): # odd number of agents means one agent won't get to play
+                self.trade(agent1, agent2)

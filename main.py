@@ -15,4 +15,4 @@ def generate_sorted_graph_points() -> tuple[list, list]:
 
 points = generate_sorted_graph_points()
 plt.plot(points[0], points[1])
-plt.show() 
+plt.show()
