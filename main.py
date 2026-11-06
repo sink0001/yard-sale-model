@@ -1,41 +1,18 @@
-import random
+from Game import Game
 from Agent import Agent
-from collections.abc import Iterable
-'''
-details:
-2 agents engage in a 50/50 gamble where they gamble x% of the poorer ones money and the winner receives the amount from the loser
-once an agents wealth reaches 0 they are removed from the game
-1 run of the game consists of random interactions so 50 pairs of trades are made by 50 agents playing against another agent randomly
-'''
+import matplotlib.pyplot as plt
 
 
-class Game:
-    
-    def __init__(self, agents: list[Agent], trade_percentage) -> None:
-        self.agents = agents
-        self.trade_percent = trade_percentage
+agents = [Agent(str(i), 100) for i in range(1000)]
+game = Game(agents, 0.1)
+game.play(100)
 
-    def make_partners(self) -> Iterable[tuple[Agent, Agent]]:
-        agents_copy = self.agents[:]
-        
-        for i in range(len(self.agents)//2):
-            i2 = random.randrange(0, len(agents_copy))
-            agents_copy.pop(i2)
-            yield (self.agents[i], self.agents[i2])
 
-    def trade(self, agent1: Agent, agent2: Agent):
-        winner = random.randint(1, 2)
-        amount = self.trade_percent * min(agent1.balance, agent2.balance)
-        if winner == 1:
-            agent1.balance += amount
-            agent2.balance -= amount
-        else:
-            agent2.balance += amount
-            agent1.balance -= amount
+def generate_sorted_graph_points() -> tuple[list, list]:
+    y_vals = [round(a.balance, 2) for a in sorted(game.agents, key=lambda agent: agent.balance)]
+    x_vals = [i for i in range(1, len(agents)+1)]
+    return (x_vals, y_vals)
 
-    def play(self, runs):
-        
-        for _ in range(runs):
-            partnered_agents = set()
-
-            for partners in self.make_partners(): # odd number of agents means one agent won't get to play
+points = generate_sorted_graph_points()
+plt.plot(points[0], points[1])
+plt.show() 

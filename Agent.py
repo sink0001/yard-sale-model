@@ -1,6 +1,6 @@
 
 
 class Agent:
-    def __init__(self, name, balance) -> None:
+    def __init__(self, name: str, balance: float) -> None:
         self.name = name
         self.balance = balance
