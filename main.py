@@ -11,8 +11,9 @@ once an agents wealth reaches 0 they are removed from the game
 
 class Game:
     
-    def __init__(self, agents: list[Agent]) -> None:
+    def __init__(self, agents: list[Agent], trade_percentage) -> None:
         self.agents = agents
+        self.trade_percent = trade_percentage
 
     def make_partners(self) -> Iterable[tuple[Agent, Agent]]:
         agents_copy = self.agents[:]
@@ -21,11 +22,20 @@ class Game:
             i2 = random.randrange(0, len(agents_copy))
             agents_copy.pop(i2)
             yield (self.agents[i], self.agents[i2])
-    
+
+    def trade(self, agent1: Agent, agent2: Agent):
+        winner = random.randint(1, 2)
+        amount = self.trade_percent * min(agent1.balance, agent2.balance)
+        if winner == 1:
+            agent1.balance += amount
+            agent2.balance -= amount
+        else:
+            agent2.balance += amount
+            agent1.balance -= amount
+
     def play(self, runs):
         
         for _ in range(runs):
             partnered_agents = set()
 
             for partners in self.make_partners(): # odd number of agents means one agent won't get to play
-                
