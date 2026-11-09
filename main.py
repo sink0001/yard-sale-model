@@ -3,9 +3,14 @@ from Agent import Agent
 import matplotlib.pyplot as plt
 
 
-agents = [Agent(str(i), 100) for i in range(100)]
-game = Game(agents, 0.3)
-game.play(1000)
+trade_wager = 0.1
+agent_number = 1000
+starting_balance = 23
+number_of_runs = 10000
+
+agents = [Agent(str(i), starting_balance) for i in range(agent_number)]
+game = Game(agents, trade_wager)
+game.play(number_of_runs)
 
 
 def generate_sorted_graph_points() -> tuple[list, list]:
@@ -16,7 +21,7 @@ def generate_sorted_graph_points() -> tuple[list, list]:
 
 
 points = generate_sorted_graph_points()
-plt.xlabel("Agent rank (poorest to richest) %")
+plt.xlabel("Agent rank (poorest to richest)")
 plt.ylabel("Balance")
 plt.title("Distribution of Wealth")
 
