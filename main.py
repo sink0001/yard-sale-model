@@ -8,7 +8,7 @@ agent_number = 1000
 starting_balance = 23
 number_of_runs = 10000
 
-agents = [Agent(str(i), starting_balance) for i in range(agent_number)]
+agents = [Agent(str(i), starting_balance, 0.5) for i in range(agent_number)]
 game = Game(agents, trade_wager)
 game.play(number_of_runs)
 
